@@ -1,0 +1,8 @@
+{% extends "delete_account_request.html" %}
+
+{% block content %}
+	<p>{% trans "Please enter your password to confirm your ownership of this account. You account removal will be effective immediately and permanently after you submit this form." %}</p>
+	<form method="post" action="{% url "delete_account" user.username key %}">
+		{% include "form.html" %}
+		<div class="buttonContainer"><input type="submit" value="{% trans "Delete my account" %}"></div>
+{% endblock %}

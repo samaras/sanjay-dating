@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{% trans "Recover your account" %} |{% endblock %}
+
+{% block header %}<h1>{% trans "Recover your account" %}</h1>{% endblock %}
+
+{% block content %}
+	{% if invalid %}{% url "password_reset_recover" as recovery_url %}
+    <p>{% blocktrans %}Sorry, this password reset link is invalid. You can still <a href="{{ recovery_url }}">request a new one</a>.{% endblocktrans %}</p>
+  {% else %}
+    <p>{% blocktrans %}Hi, <strong>{{ username }}</strong>. Please choose your new password.{% endblocktrans %}</p>
+    <form method="post" action="{% url "password_reset_reset" token %}">
+			{% include "form.html" %}
+			<div class="buttonContainer"><input type="submit" value="{% trans "Set new password" %}"></div>
+    </form>
+  {% endif %}
+{% endblock %}

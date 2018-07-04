@@ -1,0 +1,57 @@
+<! DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet/less" href="{{ STATIC_URL }}style.less">
+    <script src="{{ STATIC_URL }}less.js"></script>
+</head>
+<body>
+    <header>
+        <div class="wrapper">
+            <img src="{{ STATIC_URL }}gfx/logo.png">
+            <span >Twitter Clone</span>
+            {% block login %}
+            <a href="/">Home</a>
+            <a href="/users/">Public Profiles</a>
+            <a href="/users/{{ username }}">My Profile</a>
+            <a href="/ribbits">Public Ribbits</a>
+            <form action="/logout">
+                <input type="submit" id="btnLogOut" value="Log Out">
+            </form>
+            {% endblock %}
+        </div>
+    </header>
+    <div id="content">
+        <div class="wrapper">
+            {% block flash %}
+            {% if auth_form.non_field_errors or user_form.non_field_errors or ribbit_form.errors %}
+            <div class="flash error">
+                {{ auth_form.non_field_errors }}
+                {{ user_form.non_field_errors }}
+                    {{ ribbit_form.content.errors }}
+            </div>
+            {% endif %}
+            {% if notice %}
+            <div class="flash notice">
+                {{ notice }}
+            </div>
+            {% endif %}
+            {% endblock %}
+ 
+            {% block content %}
+ 
+            {% endblock %}
+        </div>
+    </div>
+    <footer>
+        <div class="wrapper">
+            Ribbit - A Twitter Clone Tutorial
+            <a href="http://net.tutsplus.com">
+                <img src="{{ STATIC_URL }}gfx/logo-nettuts.png">
+            </a>
+            <a href="http://www.djangoproject.com/">
+                < img src="https://www.djangoproject.com/m/img/badges/djangomade124x25.gif
+            </a>
+        </div>
+    </footer>
+</body>
+</html>

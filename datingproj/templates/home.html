@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+ 
+{% block login %}
+    <form action="/login" method="post">{% csrf_token %}
+  {% for field in auth_form %}
+        {{ field }}
+  {% endfor %}
+        <input type="submit" id="btnLogIn" value="Log In">
+    </form>
+{% endblock %}
+ 
+{% block content %}
+{% if auth_form.non_field_errors or user_form.non_field_errors %}
+<div class="flash error">
+    {{ auth_form.non_field_errors }}
+    {{ user_form.non_field_errors }}
+</div>
+{% endif %}
+<div class="panel right">
+    <h1>New to Ribbit?</h1>
+    <p>
+        <form action="/signup" method="post">{% csrf_token %}
+            {% for field in user_form %}
+            {{ field }}
+            {% endfor %}
+            <input type="submit" value="Create Account">
+        </form>
+    </p>
+</div>
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+    <div class="container">
+        <h1>{{ some_dynamic_value }}</h1>
+
+        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Example row of columns -->
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Heading</h2>
+
+            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+
+            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Heading</h2>
+
+            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+
+            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Heading</h2>
+
+            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+
+            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div>
+    </div>
+
+    <hr>
+</div> <!-- /container -->
+{% endblock %}

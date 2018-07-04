@@ -1,0 +1,61 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>{% block title %}{% endblock %} Dating Flow</title>
+		<link rel="shortcut icon" href="{% static "dating/img/favicon.ico" %}">
+		<link rel="stylesheet" href="{% static "dating/css/styles.css" %}" type="text/css" media="all" charset="utf-8">
+	
+		{% block adder %}{% endblock %}
+	</head>
+<body{% block bodymeta %}{% endblock %} data-static-url="{{ STATIC_URL }}">
+<div class="wrapper">
+	<div class="nav">
+		<ul>
+			<li{% block nav_li_class_home %}{% endblock %}><a href="{% url "home" %}">Home</a></li>
+			<li{% block nav_li_class_about %}{% endblock %}><a href="{% url "aboutus" %}">About Us</a></li>
+			<li{% block nav_li_class_search %}{% endblock %}><a href="{% url "whatwedo" %}">Search</a></li>
+			{% if not user.is_authenticated %}
+				<!-- not logged in -->
+				<li{% block nav_li_class_login %}{% endblock %}><a href="{% url "login" %}" class="login">log in</a></li>
+				<li{% block nav_li_class_signup %}{% endblock %}><a href="{% url "signup" %}">sign up</a></li>
+			{% else %}
+				<!-- logged in -->
+				<li>You are logged in as <strong>{{ user }}</strong></li>
+				<li{% block nav_li_class_profile %}{% endblock %}><a href="{% url "user_profile" user.username %}">Your profile</a></li>
+				<li{% block nav_li_class_account %}{% endblock %}><a href="{% url "edit_account" user.username %}">Your account</a></li>
+				<li><a href="{% url "logout" %}">log out" %}</a></li>
+			{% endif %}
+		</ul>
+		{% if not user.is_authenticated %}
+			<div id="hiddenLogin" style="display: none">
+				<form action="{% url "login" %}" method="POST">{% csrf_token %}<p><label for="id_usernameH">Username</label><input type="text" name="username" id="id_usernameH"></p><p><label for="id_passwordH">Password</label><input type="password" name="password" id="id_passwordH"></p><p><input type="submit" value="Log in" class="submit"></p>
+					<input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}{% url "redirect_to_logged_in_user_profile" %}{% endif %}">
+				</form>
+			</div>
+		{% endif %}
+	</div>
+	<div class="header content">
+		{% block header %}<h1>Django People}</h1>{% endblock %}
+		{% block tagline %}{% if home %}<h2 class="tagline">Discover users of the <a href="https://www.djangoproject.com/">Django Web framework</a> near you</h2>{% endif %}{% endblock %}
+	</div>
+	<div class="content">
+		{% block content %}{% endblock %}
+	</div>
+	{% block extra %}{% endblock %}
+	<div class="push"></div>
+</div>
+
+<div class="footer">
+	<p>Hosted on <span class="linode">Linode</span></p>
+</div>
+
+{% if debug %}
+	<script type="text/javascript" src="{% static "dating/js/dating.js" %}"></script>
+{% else %}
+	<script type="text/javascript" src="{% static "dating/js/dating.min.js" %}"></script>
+{% endif %}
+
+</body>
+</html>

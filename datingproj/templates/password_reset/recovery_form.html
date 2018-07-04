@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}{% trans "Recover your account" %} |{% endblock %}
+
+{% block header %}<h1>{% trans "Recover your account" %}</h1>{% endblock %}
+
+{% block content %}
+	{% if form %}
+		<p class="help">{% trans "Enter your username and we'll send an account recovery link to the e-mail address associated with your account." %}</p>
+		<form method="post" action="{% url "password_reset_recover" %}">
+			{% include "form.html" %}
+			<div class="buttonContainer">
+				<input type="submit" value="{% trans "Recover account" %}">
+			</div>
+		</form>
+	{% else %}
+		 <p>{% blocktrans %}An email has just been sent to <strong>{{ email }}</strong>. Use the link in it to set a new password.{% endblocktrans %}</p>
+	 {% endif %}
+{% endblock %}

@@ -1,0 +1,5 @@
+<div id="{{ field.auto_id }}_field" class="fieldWrapper{% if field.field.required %} required{% endif %} {{ field.name }}{% if klass %} {{ klass }}{% endif %}">
+  {{ field.errors }}
+  {{ field.label_tag }}
+  {{ field }}
+</div>

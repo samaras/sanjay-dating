@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}{% trans "Account settings" %} |{% endblock %}
+
+{% block nav_li_class_account %} class="current"{% endblock %}
+
+{% block header%}
+	<h1>{% trans "Account settings" %}</h1>
+{% endblock %}
+
+{% block content %}
+<ul>
+	<li><a href="{% url "edit_location" user.username %}">{% trans "Change your location" %}</a></li>
+	<li><a href="{% url "edit_finding" user.username %}">{% trans "Update your contact details" %}</a></li>
+	<li><a href="{% url "edit_finding" user.username %}#privacy">{% trans "Change your privacy settings" %}</a></li>
+	<li><a href="{% url "edit_portfolio" user.username %}">{% trans "Add sites to your portfolio" %}</a></li>
+	<li>{% if user.has_usable_password %}<a href="{% url "edit_password" user.username %}">{% trans "Change your password" %}</a>{% else %}{% url "edit_password" user.username as password_url %}{% blocktrans %}You do not have a password set - <a href="{{ password_url }}">set one now?</a>{% endblocktrans %}{% endif %}</li>
+	<li><a href="{% url "delete_account_request" user.username %}">{% trans "Delete your account" %}</a></li>
+</ul>
+<br>
+{% with user.useropenid_set.count as ocount %}
+	<p class="help">{% if ocount %}
+		{% url "openid_associations" as openid_url %}
+		{% blocktrans count counter=ocount %}You have {{ counter }} OpenID associated with your account. <a href="{{ openid_url }}">Manage your OpenID</a>{% plural %}You have {{ counter }} OpenIDs associated with your account. <a href="{{ openid_url }}">Manage your OpenIDs</a>{% endblocktrans %}
+	{% else %}
+		{% url "openid_associations" as openid_url %}
+		{% blocktrans %}If you have an <a href="http://openid.net/">OpenID</a>, you can <a href="{{ openid_url }}">associate it with your account</a>. This will allow you to log in using your OpenID instead of your password.{% endblocktrans %}
+	{% endif %}</p>
+{% endwith %}
+
+<h2>{% trans "Advanced: Use your profile page as an OpenID" %}</h2>
+	<form method="post" action="{% url "edit_account" user.username %}">
+	<p class="help">
+	{% trans "If you already have an OpenID, you can configure your Django People profile page to delegate to it. This means you'll be able to use your profile page as an OpenID, without having to sign in to Django People first." %}
+	</p>
+	<p class="help">
+		{% blocktrans %}Read <a href="http://simonwillison.net/2006/Dec/19/openid/">more about delegation</a> to learn how to use this form.{% endblocktrans %}
+	</p>
+
+	{% include "includes/form.html" %}
+
+	<div class="buttonContainer"><input type="submit" value="{% trans "Update OpenID delegation" %}"></div>
+	</form>
+{% endblock %}

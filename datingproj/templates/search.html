@@ -1,0 +1,35 @@
+{% extends "maps.html" %}
+{% load person_list_items sekizai_tags %}
+
+{% block title %}{% if q %}{% blocktrans %}Search: {{ q }}{% endblocktrans %}{% else %}{% trans "Search" %}{% endif %} |{% endblock %}
+
+{% block nav_li_class_search %} class="current"{% endblock %}
+
+{% block header %}
+	<form action="{% url "search" %}" method="GET" class="search">
+		<h1><label for="q">{% if q %}{% blocktrans %}Search: {{ q }}{% endblocktrans %}{% else %}{% trans "Search" %}{% endif %}</label></h1>
+		{% if people_list %}<p class="meta">{% blocktrans count counter=people_list|length %}{{ counter }} result{% plural %}{{ counter }} results{% endblocktrans %}</p>{% endif %}
+		{% if has_badwords %}<p class="help"><strong>{% trans "Terms must be three or more characters" %}</strong></p>{% endif %}
+		<p><input type="text" name="q" id="q" value="{{ q }}"> <input type="submit" class="submit" value="{% trans "Search" %}"></p>
+		<p>{% trans "This tool searches by username, first name and last name." %}</p>
+	</form>
+{% endblock %}
+
+{% block map %}
+	{% if people_list %}
+		<div class="mapContainer major">
+			<div id="map">&nbsp;</div>
+		</div>
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+	{% if q and not people_list %}
+		<p>{% trans "No users found." %}</p>
+	{% endif %}
+	{% if people_list %}
+		<ul class="detailsList split">
+			{% person_list_items people_list %}
+		</ul>
+	{% endif %}
+{% endblock %}
