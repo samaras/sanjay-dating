@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _ 
 
 import datetime
+import stripe
 from django.utils.timezone import utc
 
 GENDER_TYPE = (
@@ -89,6 +90,31 @@ class CreditCardCharges(models.Model):
 	city = models.CharField(max_length=50)
 	address_zip = models.CharField(max_length=20)
 	address_state = models.CharField(max_length=60)
-	stripe_id = models.CharField(max_length=30)
+	stripe_id = models.CharField(max_length=30, blank=True)
 	added_at = models.DateTimeField(auto_now_add=datetime.datetime.now)
 
+	def __unicode__(self):
+		return u"%s's Charges" % self.user 
+
+	def charge(self, request, email, fee):
+		# Stripe API KEY
+		stripe.api_key = settings.STRIPE_SECRET_KEY
+
+		# Get credit card details from form 
+		token = request.POST['stripeToken']
+
+		# Create a customer on stripe
+		stripe_customer = stripe.Customer.create(card=token, description=email)
+
+		# Save stripe ID to customer profile
+		self.stripe_id = stripe_customer.id
+		self.save()
+
+		# Charge the customer, amount is in cents
+		stripe.Charge.create(
+			amount=fee,
+			currency=settings.STRIPE_CURRENCY,
+			customer=stripe_customer.id
+		)
+
+		return stripe_customer

@@ -133,6 +133,10 @@ MEDIA_URL = '/media/'
 
 LOGIN_URL = 'django.contrib.auth.views.login'
 
+# STRIPE 
+STRIPE_API_KEY = '**********************************'
+STRIPE_CURRENCY = 'cad'
+
 # CELERY
 BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
